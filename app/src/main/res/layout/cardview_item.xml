@@ -73,7 +73,7 @@
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_marginStart="12dp"
-                        android:drawableStart="@drawable/ic_restaurant_black_24dp"
+                        android:drawableStart="@drawable/ic_servings"
                         cardview:layout_constraintBottom_toBottomOf="parent"
                         cardview:layout_constraintStart_toStartOf="parent"
                         cardview:layout_constraintTop_toBottomOf="@+id/textView8" />
@@ -117,7 +117,7 @@
                         android:layout_height="25dp"
                         android:layout_marginStart="12dp"
                         android:contentDescription="@string/ready_in_min_img"
-                        android:drawableStart="@drawable/ic_access_time_black_24dp"
+                        android:drawableStart="@drawable/ic_time"
                         cardview:layout_constraintBottom_toBottomOf="parent"
                         cardview:layout_constraintStart_toStartOf="parent"
                         cardview:layout_constraintTop_toBottomOf="@+id/textView10" />
@@ -129,7 +129,7 @@
                         android:layout_marginStart="9dp"
                         android:layout_marginEnd="15dp"
                         android:text="@string/min"
-                        android:textColor="#E35C5C"
+                        android:textColor="#FF8F41"
                         android:textSize="12sp"
                         cardview:layout_constraintBottom_toBottomOf="parent"
                         cardview:layout_constraintEnd_toEndOf="parent"

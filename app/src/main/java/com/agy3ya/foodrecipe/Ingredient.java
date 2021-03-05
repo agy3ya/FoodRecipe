@@ -6,7 +6,7 @@ public class Ingredient {
 
     public Ingredient(String name, String thumbnail) {
         this.name = name;
-        Thumbnail = "https://spoonacular.com/cdn/ingredients 100x100" + thumbnail;
+        Thumbnail = "https://spoonacular.com/cdn/ingredients_100x100/" + thumbnail;
     }
 
     public String getName() {

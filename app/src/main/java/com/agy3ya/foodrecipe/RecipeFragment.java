@@ -98,40 +98,32 @@ public class RecipeFragment extends Fragment implements View.OnClickListener  {
                 Request.Method.GET,
                 URL,
                 null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            jsonArray = (JSONArray) response.get("results");
-                            Log.i("the search res is:", String.valueOf(jsonArray));
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject jsonObject1;
-                                jsonObject1 = jsonArray.getJSONObject(i);
-                                searchRecipe.add(new Recipe(jsonObject1.optString("id"),jsonObject1.optString("title"), "https://spoonacular.com/recipeImages/" + jsonObject1.optString("image"), Integer.parseInt(jsonObject1.optString("servings")), Integer.parseInt(jsonObject1.optString("readyInMinutes"))));
-                            }
-                            progressBar.setVisibility(View.GONE);
-                            if(searchRecipe.isEmpty()){
-                                recyclerView.setAlpha(0);
-                                emptyTextView.setVisibility(View.VISIBLE);
-                            }
-                            else{
-                                emptyTextView.setVisibility(View.GONE);
-                                RecyclerViewAdapter myAdapter = new RecyclerViewAdapter(getContext(), searchRecipe);
-                                recyclerView.setAdapter(myAdapter);
-                                recyclerView.setItemAnimator(new DefaultItemAnimator());
-                                recyclerView.setAlpha(1);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                response -> {
+                    try {
+                        jsonArray = (JSONArray) response.get("results");
+                        Log.i("the search res is:", String.valueOf(jsonArray));
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject jsonObject1;
+                            jsonObject1 = jsonArray.getJSONObject(i);
+                            searchRecipe.add(new Recipe(jsonObject1.optString("id"),jsonObject1.optString("title"), "https://spoonacular.com/recipeImages/" + jsonObject1.optString("image"), Integer.parseInt(jsonObject1.optString("servings")), Integer.parseInt(jsonObject1.optString("readyInMinutes"))));
                         }
+                        progressBar.setVisibility(View.GONE);
+                        if(searchRecipe.isEmpty()){
+                            recyclerView.setAlpha(0);
+                            emptyTextView.setVisibility(View.VISIBLE);
+                        }
+                        else{
+                            emptyTextView.setVisibility(View.GONE);
+                            RecyclerViewAdapter myAdapter = new RecyclerViewAdapter(getContext(), searchRecipe);
+                            recyclerView.setAdapter(myAdapter);
+                            recyclerView.setItemAnimator(new DefaultItemAnimator());
+                            recyclerView.setAlpha(1);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                 },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.i("the res is error:", error.toString());
-                    }
-                }
+                error -> Log.i("the res is error:", error.toString())
         );
         requestQueue.add(jsonObjectRequest);
 
@@ -144,26 +136,23 @@ public class RecipeFragment extends Fragment implements View.OnClickListener  {
                 Request.Method.GET,
                 URL,
                 null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            jsonArray = (JSONArray) response.get("recipes");
-                            Log.i("the res is:", String.valueOf(jsonArray));
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject jsonObject1;
-                                jsonObject1 = jsonArray.getJSONObject(i);
-                                recipeList.add(new Recipe(jsonObject1.optString("id"),jsonObject1.optString("title"), jsonObject1.optString("image"), Integer.parseInt(jsonObject1.optString("servings")), Integer.parseInt(jsonObject1.optString("readyInMinutes"))));
-                            }
-                            progressBar.setVisibility(View.GONE);
-                            RecyclerViewAdapter myAdapter = new RecyclerViewAdapter(getContext(), recipeList);
-                            recyclerView.setAdapter(myAdapter);
-                            recyclerView.setItemAnimator(new DefaultItemAnimator());
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                response -> {
+                    try {
+                        jsonArray = (JSONArray) response.get("recipes");
+                        Log.i("the res is:", String.valueOf(jsonArray));
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject jsonObject1;
+                            jsonObject1 = jsonArray.getJSONObject(i);
+                            recipeList.add(new Recipe(jsonObject1.optString("id"),jsonObject1.optString("title"), jsonObject1.optString("image"), Integer.parseInt(jsonObject1.optString("servings")), Integer.parseInt(jsonObject1.optString("readyInMinutes"))));
                         }
+                        progressBar.setVisibility(View.GONE);
+                        RecyclerViewAdapter myAdapter = new RecyclerViewAdapter(getContext(), recipeList);
+                        recyclerView.setAdapter(myAdapter);
+                        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                 },
                 new Response.ErrorListener() {
@@ -188,7 +177,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener  {
                 imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
             } catch (Exception e) {
             }
-            if(!searchTextView.getText().toString().toString().equals("")) {
+            if(!searchTextView.getText().toString().equals("")) {
                 progressBar.setVisibility(View.VISIBLE);
                 recyclerView.setAlpha(0);
                 searchRecipe(searchTextView.getText().toString());

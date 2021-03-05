@@ -35,7 +35,7 @@ public class RecipeActivity extends AppCompatActivity {
     private ImageView img, vegeterian;
     private JSONArray ingredientsArr;
     private List<Ingredient> ingredientsLst = new ArrayList<Ingredient>();
-    private RecyclerView myrv;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +53,8 @@ public class RecipeActivity extends AppCompatActivity {
         getRecipeData(recipeId);
 
 
-        myrv = findViewById(R.id.recipe_ingredients_rv);
-        myrv.setLayoutManager(new GridLayoutManager(this, 2));
+        recyclerView = findViewById(R.id.recipe_ingredients_rv);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
     }
 
     private void getRecipeData(final String recipeId) {
@@ -64,59 +64,53 @@ public class RecipeActivity extends AppCompatActivity {
                 Request.Method.GET,
                 URL,
                 null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
+                response -> {
+                    try {
                         try {
-                            try {
-                                Picasso.get().load((String) response.get("image")).into(img);
-                            }
-                            catch (Exception e){
-                                img.setImageResource(R.drawable.ic_baseline_photo_24);
-                            }
-                            title.setText((String) response.get("title"));
-                            ready_in.setText(Integer.toString((Integer) response.get("readyInMinutes")));
-                            servings.setText(Integer.toString((Integer) response.get("servings")));
-                            if ((boolean) response.get("veryHealthy")) {
-                                healthy.setText("Healthy");
-                            }
-                            if ((boolean) response.get("vegetarian")) {
-                                vegeterian.setImageResource(R.drawable.ic_veg);
-                            }
-                            try{
-                                if(response.get("instructions").equals("")){
-                                    throw new Exception("No Instructions");
-                                }
-                                else
-                                    instructions.setText(Html.fromHtml((String) response.get("instructions")));
-                            }
-                            catch(Exception e){
-                                String msg= "the recipe you were looking for not found, to view the original recipe click on the link below:" + "<a href="+response.get("spoonacularSourceUrl")+">"+response.get("spoonacularSourceUrl")+"</a>";
-                                instructions.setMovementMethod(LinkMovementMethod.getInstance());
-                                instructions.setText(Html.fromHtml(msg));
-                            }
-                            ingredientsArr = (JSONArray) response.get("extendedIngredients");
-                            for (int i = 0; i < ingredientsArr.length(); i++) {
-                                JSONObject jsonObject1;
-                                jsonObject1 = ingredientsArr.getJSONObject(i);
-                                ingredientsLst.add(new Ingredient(jsonObject1.optString("originalString"), jsonObject1.optString("image")));
-                            }
-                            RecyclerViewIngredientAdapter myAdapter = new RecyclerViewIngredientAdapter(getApplicationContext(), ingredientsLst);
-                            myrv.setAdapter(myAdapter);
-                            myrv.setItemAnimator(new DefaultItemAnimator());
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                            Picasso.get().load((String) response.get("image")).into(img);
                         }
+                        catch (Exception e){
+                            img.setImageResource(R.drawable.ic_baseline_photo_24);
+                        }
+                        title.setText((String) response.get("title"));
+                        ready_in.setText(Integer.toString((Integer) response.get("readyInMinutes")));
+                        servings.setText(Integer.toString((Integer) response.get("servings")));
+                        if ((boolean) response.get("veryHealthy")) {
+                            healthy.setText("Healthy");
+                        }
+                        if ((boolean) response.get("vegetarian")) {
+                            vegeterian.setImageResource(R.drawable.ic_veg);
+                        }
+                        try{
+                            if(response.get("instructions").equals("")){
+                                throw new Exception("No Instructions");
+                            }
+                            else
+                                instructions.setText(Html.fromHtml((String) response.get("instructions")));
+                        }
+                        catch(Exception e){
+                            String msg= "the recipe you were looking for not found, to view the original recipe click on the link below:" + "<a href="+response.get("spoonacularSourceUrl")+">"+response.get("spoonacularSourceUrl")+"</a>";
+                            instructions.setMovementMethod(LinkMovementMethod.getInstance());
+                            instructions.setText(Html.fromHtml(msg));
+                        }
+                        ingredientsArr = (JSONArray) response.get("extendedIngredients");
+                        for (int i = 0; i < ingredientsArr.length(); i++) {
+                            JSONObject jsonObject1;
+                            jsonObject1 = ingredientsArr.getJSONObject(i);
+                            ingredientsLst.add(new Ingredient(jsonObject1.optString("originalString"), jsonObject1.optString("image")));
+                        }
+                        RecyclerViewIngredientAdapter myAdapter = new RecyclerViewIngredientAdapter(getApplicationContext(), ingredientsLst);
+                        recyclerView.setAdapter(myAdapter);
+                        recyclerView.setItemAnimator(new DefaultItemAnimator());
+                        recyclerView.setAlpha(1);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                 },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.i("the res is error:", error.toString());
-                    }
-                }
+                error -> Log.i("the res is error:", error.toString())
         );
         requestQueue.add(jsonObjectRequest);
     }
+
 }
