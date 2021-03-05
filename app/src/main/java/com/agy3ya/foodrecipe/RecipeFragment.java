@@ -1,6 +1,7 @@
 package com.agy3ya.foodrecipe;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,16 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,12 +33,13 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class RecipeFragment extends Fragment implements View.OnClickListener  {
     private List<Recipe> recipeList = new ArrayList<>();
-    private List<Recipe> search Recipe;
+    private List<Recipe> searchRecipe;
     private JSONArray jsonArray;
     private ImageButton searchButton;
     private TextView searchTextView, emptyTextView;
@@ -76,7 +87,95 @@ public class RecipeFragment extends Fragment implements View.OnClickListener  {
         return rootView;
     }
 
+    private void searchRecipe(String search) {
+        searchRecipe = new ArrayList<Recipe>();
+        // String URL="https://api.spoonacular.com/recipes/search?query=" + search + "&number=30&instructionsRequired=true&apiKey=f56c86cf89d843ca83cbb5c92a2c9dfd";
+        String URL="https://api.spoonacular.com/recipes/search?query=" + search + "&instructionsRequired=true&apiKey=f56c86cf89d843ca83cbb5c92a2c9dfd";
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                URL,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            jsonArray = (JSONArray) response.get("results");
+                            Log.i("the search res is:", String.valueOf(jsonArray));
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject1;
+                                jsonObject1 = jsonArray.getJSONObject(i);
+                                searchRecipe.add(new Recipe(jsonObject1.optString("id"),jsonObject1.optString("title"), "https://spoonacular.com/recipeImages/" + jsonObject1.optString("image"), Integer.parseInt(jsonObject1.optString("servings")), Integer.parseInt(jsonObject1.optString("readyInMinutes"))));
+                            }
+                            progressBar.setVisibility(View.GONE);
+                            if(searchRecipe.isEmpty()){
+                                recyclerView.setAlpha(0);
+                                emptyTextView.setVisibility(View.VISIBLE);
+                            }
+                            else{
+                                emptyTextView.setVisibility(View.GONE);
+                                RecyclerViewAdapter myAdapter = new RecyclerViewAdapter(getContext(), searchRecipe);
+                                recyclerView.setAdapter(myAdapter);
+                                recyclerView.setItemAnimator(new DefaultItemAnimator());
+                                recyclerView.setAlpha(1);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.i("the res is error:", error.toString());
+                    }
+                }
+        );
+        requestQueue.add(jsonObjectRequest);
+
+    }
+
     private void getRandomRecipes() {
+        String URL = " https://api.spoonacular.com/recipes/random?number=30&instructionsRequired=true&apiKey=f56c86cf89d843ca83cbb5c92a2c9dfd ";
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                URL,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            jsonArray = (JSONArray) response.get("recipes");
+                            Log.i("the res is:", String.valueOf(jsonArray));
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject1;
+                                jsonObject1 = jsonArray.getJSONObject(i);
+                                recipeList.add(new Recipe(jsonObject1.optString("id"),jsonObject1.optString("title"), jsonObject1.optString("image"), Integer.parseInt(jsonObject1.optString("servings")), Integer.parseInt(jsonObject1.optString("readyInMinutes"))));
+                            }
+                            progressBar.setVisibility(View.GONE);
+                            RecyclerViewAdapter myAdapter = new RecyclerViewAdapter(getContext(), recipeList);
+                            recyclerView.setAdapter(myAdapter);
+                            recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.i("the res is error:", error.toString());
+                        progressBar.setVisibility(View.GONE);
+                        recyclerView.setAlpha(0);
+                        emptyTextView.setVisibility(View.VISIBLE);
+                    }
+                }
+        );
+        requestQueue.add(jsonObjectRequest);
+
     }
 
     @Override

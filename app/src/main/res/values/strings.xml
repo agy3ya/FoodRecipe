@@ -2,4 +2,11 @@
     <string name="app_name">Food Recipe</string>
     <string name="search">Search</string>
     <string name="search_your_recipes">Search Your Recipes</string>
+    <string name="recipe_title">title</string>
+    <string name="servings">Servings</string>
+    <string name="default_servings_value">00</string>
+    <string name="ready_in">Ready In</string>
+    <string name="ready_in_min_img">ready in min img</string>
+    <string name="img_of_recipe">img of recipe</string>
+    <string name="min">MINS</string>
 </resources>
