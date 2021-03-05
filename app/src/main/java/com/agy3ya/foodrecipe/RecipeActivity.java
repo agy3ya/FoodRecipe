@@ -40,7 +40,7 @@ public class RecipeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recipe_);
+        setContentView(R.layout.activity_recipe);
         final Intent intent = getIntent();
         final String recipeId = Objects.requireNonNull(intent.getExtras()).getString("id");
         img = findViewById(R.id.recipe_img);
@@ -72,7 +72,7 @@ public class RecipeActivity extends AppCompatActivity {
                                 Picasso.get().load((String) response.get("image")).into(img);
                             }
                             catch (Exception e){
-                                img.setImageResource(R.drawable.nopicture);
+                                img.setImageResource(R.drawable.ic_baseline_photo_24);
                             }
                             title.setText((String) response.get("title"));
                             ready_in.setText(Integer.toString((Integer) response.get("readyInMinutes")));
@@ -81,7 +81,7 @@ public class RecipeActivity extends AppCompatActivity {
                                 healthy.setText("Healthy");
                             }
                             if ((boolean) response.get("vegetarian")) {
-                                vegeterian.setImageResource(R.drawable.vegeterian);
+                                vegeterian.setImageResource(R.drawable.ic_veg);
                             }
                             try{
                                 if(response.get("instructions").equals("")){
@@ -101,7 +101,7 @@ public class RecipeActivity extends AppCompatActivity {
                                 jsonObject1 = ingredientsArr.getJSONObject(i);
                                 ingredientsLst.add(new Ingredient(jsonObject1.optString("originalString"), jsonObject1.optString("image")));
                             }
-                            RecyclerViewAdapterRecipeIngredient myAdapter = new RecyclerViewAdapterRecipeIngredient(getApplicationContext(), ingredientsLst);
+                            RecyclerViewIngredientAdapter myAdapter = new RecyclerViewIngredientAdapter(getApplicationContext(), ingredientsLst);
                             myrv.setAdapter(myAdapter);
                             myrv.setItemAnimator(new DefaultItemAnimator());
 

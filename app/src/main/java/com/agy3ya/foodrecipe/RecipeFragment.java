@@ -1,5 +1,6 @@
 package com.agy3ya.foodrecipe;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -57,7 +59,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener  {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
        final View rootView = inflater.inflate(R.layout.fragment_recipe,container,false);
         Toolbar mToolBar = rootView.findViewById(R.id.toolbar);
-        ((AppCompatActivity) Objects.requireNonNull(getActivity())).setSupportActionBar(mToolBar);
+       ((AppCompatActivity) Objects.requireNonNull(getActivity())).setSupportActionBar(mToolBar);
         progressBar = rootView.findViewById(R.id.progressbar2);
         emptyTextView = rootView.findViewById(R.id.empty_view2);
         recyclerView = rootView.findViewById(R.id.recyclerview);
@@ -180,6 +182,20 @@ public class RecipeFragment extends Fragment implements View.OnClickListener  {
 
     @Override
     public void onClick(View v) {
+        if(v==searchButton){
+            try {
+                InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            } catch (Exception e) {
+            }
+            if(!searchTextView.getText().toString().toString().equals("")) {
+                progressBar.setVisibility(View.VISIBLE);
+                recyclerView.setAlpha(0);
+                searchRecipe(searchTextView.getText().toString());
+            }
+            else
+                Toast.makeText(getContext(), "Type something...", Toast.LENGTH_LONG).show();
+        }
 
     }
 }

@@ -39,7 +39,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.tv_amount_of_dishes.setText(Integer.toString(mData.get(position).getAmountOfDishes()) );
         holder.tv_ready_in_mins.setText( Integer.toString(mData.get(position).getReadyInMins()) );
         if (mData.get(position).getThumbnail().isEmpty()) {
-            holder.img_recipe_thumbnail.setImageResource(R.drawable.nopicture);
+            holder.img_recipe_thumbnail.setImageResource(R.drawable.ic_baseline_photo_24);
         } else{
             Picasso.get().load(mData.get(position).getThumbnail()).into(holder.img_recipe_thumbnail);
         }

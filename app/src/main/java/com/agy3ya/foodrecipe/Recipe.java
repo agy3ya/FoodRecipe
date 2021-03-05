@@ -1,7 +1,7 @@
 package com.agy3ya.foodrecipe;
 
 public class Recipe {
-    private int id;
+    private String id;
     private String Title;
     private String Thumbnail;
     private int amountOfDishes;
@@ -15,7 +15,7 @@ public class Recipe {
         this.readyInMins = readyInMins;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 

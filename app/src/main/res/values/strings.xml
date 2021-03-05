@@ -9,4 +9,13 @@
     <string name="ready_in_min_img">ready in min img</string>
     <string name="img_of_recipe">img of recipe</string>
     <string name="min">MINS</string>
+    <string name="_000">000</string>
+    <string name="mins">mins</string>
+    <string name="serving">Serving</string>
+    <string name="not_healthy">Not Healthy</string>
+    <string name="vegetarian">vegetarian</string>
+    <string name="ingredients">ingredients</string>
+    <string name="instructions">Instructions</string>
+    <string name="ingredient_name">Ingredient Name</string>
+    <string name="no_results_found">No Result Found</string>
 </resources>
