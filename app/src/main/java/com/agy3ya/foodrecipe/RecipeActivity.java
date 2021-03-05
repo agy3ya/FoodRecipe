@@ -33,8 +33,8 @@ public class RecipeActivity extends AppCompatActivity {
 
     private TextView title, ready_in, servings, healthy, instructions;
     private ImageView img, vegeterian;
-    private JSONArray ingredientsArr;
-    private List<Ingredient> ingredientsLst = new ArrayList<Ingredient>();
+    private JSONArray jsonArray;
+    private List<Ingredient> ingredientArrayList = new ArrayList<Ingredient>();
     private RecyclerView recyclerView;
 
     @Override
@@ -93,13 +93,13 @@ public class RecipeActivity extends AppCompatActivity {
                             instructions.setMovementMethod(LinkMovementMethod.getInstance());
                             instructions.setText(Html.fromHtml(msg));
                         }
-                        ingredientsArr = (JSONArray) response.get("extendedIngredients");
-                        for (int i = 0; i < ingredientsArr.length(); i++) {
+                        jsonArray = (JSONArray) response.get("extendedIngredients");
+                        for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonObject1;
-                            jsonObject1 = ingredientsArr.getJSONObject(i);
-                            ingredientsLst.add(new Ingredient(jsonObject1.optString("originalString"), jsonObject1.optString("image")));
+                            jsonObject1 = jsonArray.getJSONObject(i);
+                            ingredientArrayList.add(new Ingredient(jsonObject1.optString("originalString"), jsonObject1.optString("image")));
                         }
-                        RecyclerViewIngredientAdapter myAdapter = new RecyclerViewIngredientAdapter(getApplicationContext(), ingredientsLst);
+                        RecyclerViewIngredientAdapter myAdapter = new RecyclerViewIngredientAdapter(getApplicationContext(), ingredientArrayList);
                         recyclerView.setAdapter(myAdapter);
                         recyclerView.setItemAnimator(new DefaultItemAnimator());
                         recyclerView.setAlpha(1);
