@@ -155,14 +155,11 @@ public class RecipeFragment extends Fragment implements View.OnClickListener  {
                         e.printStackTrace();
                     }
                 },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.i("the res is error:", error.toString());
-                        progressBar.setVisibility(View.GONE);
-                        recyclerView.setAlpha(0);
-                        emptyTextView.setVisibility(View.VISIBLE);
-                    }
+                error -> {
+                    Log.i("the res is error:", error.toString());
+                    progressBar.setVisibility(View.GONE);
+                    recyclerView.setAlpha(0);
+                    emptyTextView.setVisibility(View.VISIBLE);
                 }
         );
         requestQueue.add(jsonObjectRequest);

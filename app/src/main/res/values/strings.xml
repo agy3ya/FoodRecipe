@@ -2,7 +2,7 @@
     <string name="app_name">Food Recipe</string>
     <string name="search">Search</string>
     <string name="search_your_recipes">Search Your Recipes</string>
-    <string name="recipe_title">title</string>
+    <string name="recipe_title">Title</string>
     <string name="servings">Servings</string>
     <string name="default_servings_value">00</string>
     <string name="ready_in">Ready In</string>
