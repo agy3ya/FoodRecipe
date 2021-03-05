@@ -13,7 +13,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="160dp"
-        android:background="@color/purple_500"
+        android:background="@color/orange_dark"
         android:minHeight="?attr/actionBarSize"
         app:cardElevation="0dp">
 
@@ -29,6 +29,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/app_name"
                 android:textColor="@android:color/white"
+                android:layout_marginBottom="10dp"
                 android:textSize="24sp"/>
 
             <androidx.cardview.widget.CardView
@@ -37,7 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                app:cardBackgroundColor="@color/purple_700"
+                app:cardBackgroundColor="@color/orange"
                 app:cardCornerRadius="10dp">
 
                 <EditText

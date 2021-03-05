@@ -14,7 +14,7 @@
     <string name="serving">Serving</string>
     <string name="not_healthy">Not Healthy</string>
     <string name="vegetarian">vegetarian</string>
-    <string name="ingredients">ingredients</string>
+    <string name="ingredients">Ingredients</string>
     <string name="instructions">Instructions</string>
     <string name="ingredient_name">Ingredient Name</string>
     <string name="no_results_found">No Result Found</string>
