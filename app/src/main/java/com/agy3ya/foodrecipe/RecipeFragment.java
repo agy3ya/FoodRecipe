@@ -4,9 +4,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 
@@ -48,6 +52,28 @@ public class RecipeFragment extends Fragment implements View.OnClickListener  {
         recyclerView = rootView.findViewById(R.id.recyclerview);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
         getRandomRecipes();
+        searchTextView = rootView.findViewById(R.id.home_search_et);
+        searchButton = rootView.findViewById(R.id.home_search_btn);
+        searchButton.setOnClickListener(this);
+        searchTextView.setOnEditorActionListener((v, actionId, event) -> {
+            if(actionId == EditorInfo.IME_ACTION_SEARCH){
+                if(!v.getText().toString().equals("")){
+                    emptyTextView.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.VISIBLE);
+                    recyclerView.setAlpha(0);
+                    searchRecipe(v.getText().toString());
+                }else{
+                    Toast.makeText(getContext(),"Type anything...",Toast.LENGTH_LONG).show();
+
+                }
+            }
+            return  false;
+
+        });
+        getActivity().getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+        );
+        return rootView;
     }
 
     private void getRandomRecipes() {
